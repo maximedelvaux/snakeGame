@@ -1,16 +1,15 @@
 window.onload = function()
 {
 	
-	var canvasWidth = 900;
-	var canvasHeight = 600;
-	var blockSize = 20;
+	var canvasWidth = 700;
+	var canvasHeight = 400;
+	var blockSize = 10;
 	var ctx;
 	var delay = 100;
 	var snakee;
-	var applee;
-
+	var widthInBlocks = canvasWidth/blockSize;
+	var heightInBlocks = canvasHeight/blockSize;
 	init();
-
 
 	function init()
 	{
@@ -27,16 +26,23 @@ window.onload = function()
 	}
 
 	function refreshCanvas()
-	{
-			
-		ctx.clearRect(0,0,canvasWidth, canvasHeight);
+	{	
 		snakee.advance(); 
-		snakee.draw();
-		applee.draw();
-		setTimeout(refreshCanvas,delay);
-
+			if(snakee.checkCollision())
+			{
+				//GAME OVER
+			}
+			else
+			{
+				ctx.clearRect(0,0,canvasWidth, canvasHeight);
+				snakee.advance(); 
+				snakee.draw();
+				applee.draw();
+				setTimeout(refreshCanvas,delay); 
+			}
+	
 	}
-
+	
 	function drawBlock(ctx, position)
 	{
 		var x = position[0] * blockSize;
@@ -104,7 +110,38 @@ window.onload = function()
 				this.direction = newDirection;
 			}
 
-		}
+		};
+
+		this.checkCollision = function()
+		{
+				var wallCollision = false;
+				var snakeCollision = false;
+				var head = this.body[0];
+				var rest = this.body.slice(1);
+				var snakeX = head[0];
+				var snakeY = head[1];
+				var minX = 0;
+				var minY = 0;
+				var maxX = widthInBlocks - 1; 
+				var maxY = heightInBlocks - 1;
+				var isNotBetweenHorizontalWalls = snakeX < minX || snakeX > maxX;
+				var isNotBetweenVerticalWalls = snakeY < minY || snakeY > maxY;
+
+					if(isNotBetweenHorizontalWalls || isNotBetweenVerticalWalls)
+						{
+							wallCollision = true;
+						}
+					
+					for(var i = 0; i < rest.length; i++)
+					{
+						if (snakeX === rest[i][0] && snakeY === rest[i][1])
+						{
+							snakeCollision = true;
+						}
+					}
+					return wallCollision || snakeCollision; 
+
+		};
 
 	}
 
@@ -129,31 +166,29 @@ window.onload = function()
 
 
 document.onkeydown = function handleKeyDown(e)
-{
-	var key = e.keyCode;
-	var newDirection;
-	switch(key)
 	{
-		case 37 :
-			newDirection = "left";
-		break;
-		case 38 :
-			newDirection = "up";
-		break;
-		case 39 :
-			newDirection = "right";
-		break;
-		case 40 :
-			newDirection = "down";
-		break; 
-	default:
-		return;	
-	}
+		var key = e.keyCode;
+		var newDirection;
+		switch(key)
+		{
+			case 37 :
+				newDirection = "left";
+			break;
+			case 38 :
+				newDirection = "up";
+			break;
+			case 39 :
+				newDirection = "right";
+			break;
+			case 40 :
+				newDirection = "down";
+			break; 
+		default:
+			return;	
+		}
 
 	snakee.setDirection(newDirection);
 
-}
-
-
+	}
 
 }
