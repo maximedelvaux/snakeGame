@@ -1,14 +1,15 @@
 window.onload = function()
 {
 	
-	var canvasWidth = 700;
-	var canvasHeight = 400;
-	var blockSize = 10;
+	var canvasWidth = 900;
+	var canvasHeight = 500;
+	var blockSize = 15;
 	var ctx;
 	var delay = 70;
 	var snakee;
 	var widthInBlocks = canvasWidth/blockSize;
 	var heightInBlocks = canvasHeight/blockSize;
+	var score;
 	init();
 
 	function init()
@@ -16,11 +17,12 @@ window.onload = function()
 		var canvas = document.createElement('canvas');
 		canvas.width = canvasWidth;
 		canvas.height = canvasHeight;
-		canvas.style.border = "2px solid #444";
+		canvas.style.border = "35px solid #444";
 		document.body.appendChild(canvas);
 		ctx = canvas.getContext('2d');
 		snakee = new Snake([[6,4], [5,4], [4,4]], "right");
 		applee = new Apple ([10,10]);
+		score = 0;
 		refreshCanvas();
 
 	}
@@ -30,12 +32,13 @@ window.onload = function()
 		snakee.advance(); 
 			if(snakee.checkCollision())
 			{
-				//GAME OVER
+				gameOver();
 			}
 			else
 			{
 				if(snakee.isEatingApple(applee))
 				{
+					score++;
 					snakee.ateApple = true;
 					do {
 					applee.setNewPosition();
@@ -46,9 +49,34 @@ window.onload = function()
 				ctx.clearRect(0,0,canvasWidth, canvasHeight);
 				snakee.draw();
 				applee.draw();
+				drawScore();
 				setTimeout(refreshCanvas,delay); 
 			}
 	
+	}
+	
+	function gameOver() 
+	{
+		ctx.save();
+		ctx.fillText("Game Over Bitch.", 5, 15);
+		ctx.fillText("Press Space to play again.", 5, 30);
+		ctx.restore();
+
+	}
+	
+	function restart()
+	{
+		snakee = new Snake([[6,4], [5,4], [4,4]], "right");
+		applee = new Apple ([10,10]);
+		score = 0;
+		refreshCanvas();
+	}
+
+	function drawScore()
+	{
+		ctx.save();
+		ctx.fillText(score.toString(), 5, canvasHeight - 5 );
+		ctx.restore(); 
 	}
 	
 	function drawBlock(ctx, position)
@@ -224,6 +252,9 @@ document.onkeydown = function handleKeyDown(e)
 			case 40 :
 				newDirection = "down";
 			break; 
+			case 32 : 
+			restart();
+			return;
 		default:
 			return;	
 		}
