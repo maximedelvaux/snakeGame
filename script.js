@@ -5,7 +5,7 @@ window.onload = function()
 	var canvasHeight = 400;
 	var blockSize = 10;
 	var ctx;
-	var delay = 100;
+	var delay = 70;
 	var snakee;
 	var widthInBlocks = canvasWidth/blockSize;
 	var heightInBlocks = canvasHeight/blockSize;
@@ -34,8 +34,11 @@ window.onload = function()
 			}
 			else
 			{
+				if(snakee.isEatingApple(applee))
+				{
+					applee.setNewPosition();
+				}
 				ctx.clearRect(0,0,canvasWidth, canvasHeight);
-				snakee.advance(); 
 				snakee.draw();
 				applee.draw();
 				setTimeout(refreshCanvas,delay); 
@@ -143,6 +146,15 @@ window.onload = function()
 
 		};
 
+		this.isEatingApple = function(appleToEat)
+		{
+				var head = this.body[0];
+				if (head[0] === appleToEat.position[0] && head[1] === appleToEat.position[1])
+					return true;
+				else 
+					return false;
+		};
+
 	}
 
 
@@ -153,14 +165,21 @@ window.onload = function()
 		{
 			ctx.save();
 			ctx.fillStyle = "#33cc33";
+			ctx.beginPath();
 			var radius = blockSize/2;
-			var x = position[0]*blockSize + radius;
-			var y = position[1]*blockSize + radius;
+			var x = this.position[0]*blockSize + radius;
+			var y = this.position[1]*blockSize + radius;
 			ctx.arc(x,y, radius, 0, Math.PI*2, true);
 			ctx.fill();
 			ctx.restore();
 
 		};
+		this.setNewPosition = function() 
+		{
+			var newX = Math.round(Math.random() * (widthInBlocks-1));
+			var newY = Math.round(Math.random() * (heightInBlocks-1));
+			this.position = [newX, newY];
+		}
 	}
 
 
