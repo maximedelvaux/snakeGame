@@ -64,8 +64,8 @@ window.onload = function() {
 		ctx.lineWidth = 5;
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
-		ctx.strokeText("Game Over Bitch.", centreX, centreY - 180);
-		ctx.fillText("Game Over Bitch.", centreX, centreY - 180);
+		ctx.strokeText("Game Over.", centreX, centreY - 180);
+		ctx.fillText("Game Over.", centreX, centreY - 180);
 		ctx.font = "bold 30px sans-serif";
 		ctx.strokeText("Press space to play again.", centreX, centreY - 120);
 		ctx.fillText("Press space to play again.", centreX, centreY - 120);
