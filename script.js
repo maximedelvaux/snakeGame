@@ -12,7 +12,6 @@ window.onload = function() {
 	init();
 
 	function init(){
-	
 		var canvas = document.createElement('canvas');
 		canvas.width = canvasWidth;
 		canvas.height = canvasHeight;
@@ -26,24 +25,20 @@ window.onload = function() {
 		applee = new Apple ([10,10]);
 		score = 0;
 		refreshCanvas();
-
 	}
 
 	function refreshCanvas(){
-	
 		snakee.advance(); 
 			if(snakee.checkCollision()){
 				gameOver();
-			}
-			else{
+			}else{
 				if(snakee.isEatingApple(applee)){
 					score++;
 					snakee.ateApple = true;
 					do {
 					applee.setNewPosition();
 					}
-					while(applee.isOnSnake(snakee))
-					 	
+					while(applee.isOnSnake(snakee))	 	
 				}
 				ctx.clearRect(0,0,canvasWidth, canvasHeight);
 				drawScore();
@@ -51,10 +46,9 @@ window.onload = function() {
 				applee.draw();
 				timeout = setTimeout(refreshCanvas,delay); 
 			}
-	
 	}
 	
-	function gameOver() {
+	function gameOver(){
 		ctx.save();
 		var centreX = canvasWidth / 2;
 		var centreY = canvasHeight / 2;
@@ -70,7 +64,6 @@ window.onload = function() {
 		ctx.strokeText("Press space to play again.", centreX, centreY - 120);
 		ctx.fillText("Press space to play again.", centreX, centreY - 120);
 		ctx.restore();
-
 	}
 	
 	function restart(){
@@ -113,7 +106,6 @@ window.onload = function() {
 			}
 			ctx.restore();
 		}; 
-
 		this.advance = function() {
 			var nextPosition = this.body[0].slice();
 			switch(this.direction){
@@ -160,32 +152,29 @@ window.onload = function() {
 		};
 
 		this.checkCollision = function(){
-				var wallCollision = false;
-				var snakeCollision = false;
-				var head = this.body[0];
-				var rest = this.body.slice(1);
-				var snakeX = head[0];
-				var snakeY = head[1];
-				var minX = 0;
-				var minY = 0;
-				var maxX = widthInBlocks - 1; 
-				var maxY = heightInBlocks - 1;
-				var isNotBetweenHorizontalWalls = snakeX < minX || snakeX > maxX;
-				var isNotBetweenVerticalWalls = snakeY < minY || snakeY > maxY;
+            var wallCollision = false;
+            var snakeCollision = false;
+            var head = this.body[0];
+            var rest = this.body.slice(1);
+            var snakeX = head[0];
+            var snakeY = head[1];
+            var minX = 0;
+            var minY = 0;
+            var maxX = widthInBlocks - 1; 
+            var maxY = heightInBlocks - 1;
+            var isNotBetweenHorizontalWalls = snakeX < minX || snakeX > maxX;
+            var isNotBetweenVerticalWalls = snakeY < minY || snakeY > maxY;
 
-					if(isNotBetweenHorizontalWalls || isNotBetweenVerticalWalls){
-							wallCollision = true;
-						}
-					
-					for(var i = 0; i < rest.length; i++){
-						if (snakeX === rest[i][0] && snakeY === rest[i][1]){
-							snakeCollision = true;
-						}
-					}
-					return wallCollision || snakeCollision; 
-
+            if(isNotBetweenHorizontalWalls || isNotBetweenVerticalWalls){
+                wallCollision = true;
+            } 
+            for(var i = 0; i < rest.length; i++){
+                if (snakeX === rest[i][0] && snakeY === rest[i][1]){
+                    snakeCollision = true;
+                }
+            }
+                return wallCollision || snakeCollision; 
 		};
-
 		this.isEatingApple = function(appleToEat){
 				var head = this.body[0];
 				if (head[0] === appleToEat.position[0] && head[1] === appleToEat.position[1])
@@ -193,7 +182,6 @@ window.onload = function() {
 				else 
 					return false;
 		};
-
 	}
 
 
@@ -209,7 +197,6 @@ window.onload = function() {
 			ctx.arc(x,y, radius, 0, Math.PI*2, true);
 			ctx.fill();
 			ctx.restore();
-
 		};
 		this.setNewPosition = function() {
 			var newX = Math.round(Math.random() * (widthInBlocks-1));
@@ -226,11 +213,9 @@ window.onload = function() {
 				}
 			return isOnSnake;	
 		};
-	}
-
-
-
-document.onkeydown = function handleKeyDown(e){
+    }
+    
+    document.onkeydown = function handleKeyDown(e){
 		var key = e.keyCode;
 		var newDirection;
 		switch(key){
@@ -254,7 +239,5 @@ document.onkeydown = function handleKeyDown(e){
 		}
 
 	snakee.setDirection(newDirection);
-
 	}
-
 }
